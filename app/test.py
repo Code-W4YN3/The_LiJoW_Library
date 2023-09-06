@@ -19,3 +19,12 @@ print("Book Reviews: ")
 print(book1.all_reviews())
 print("Book Total Reader-Count: ")
 print(book1.total_reader_count())
+
+
+reader1 = session.query(Reader).first()
+print("Reader Name: ")
+print(reader1.get_full_name())
+print("Library Id: ")
+print(reader1.library_id)
+print("Favorite Book:")
+print(reader1.favorite_book())

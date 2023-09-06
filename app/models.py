@@ -20,7 +20,7 @@ class Book(Base):
     reviews = relationship('Review', back_populates='book')
     customers = association_proxy('reviews', 'reader',
         creator=lambda rd: Review(reader=rd))
-    
+
     def __repr__(self):
         return f"Book {self.id}: " \
             + f"Name: {self.name}, " \
@@ -30,24 +30,24 @@ class Book(Base):
 
     def book_name(self):
         return self.name
-    
+
     def book_author(self):
         return self.author
-    
+
     def book_genre(self):
         return self.genre
-    
+
     def total_reader_count(self):
         return self.reader_count
-    
+
     def all_reviews(self):
         return [review.rating for review in self.reviews]
-    
+
     def most_popular_book(self):
         for review in self.reviews:
             if review.rating == max(review.rating for review in self.reviews):
                 return review.book.name
-    
+
 
 class Reader(Base):
     __tablename__ = 'readers'
@@ -60,13 +60,30 @@ class Reader(Base):
     reviews = relationship('Review', back_populates='reader')
     books = association_proxy('reviews', 'book',
         creator=lambda bk: Review(book=bk))
-    
+
     def __repr__(self):
         return f"Reader {self.id}: " \
             + f"First_name: {self.first_name}" \
             + f"Last_name: {self.last_name}" \
             + f"Library_id: {self.library_id}"
 
+    def get_first_name(self):
+        return self.first_name
+
+    def get_last_name(self):
+        return self.last_name
+
+    def get_full_name(self):
+        return f"{self.first_name} {self.last_name}"
+
+    def get_library_id(self):
+        return self.library_id
+
+
+    def favorite_book(self):
+        for review in self.reviews:
+            if review.rating == max(review.rating for review in self.reviews):
+                return review.book.name
 
 
 class Review(Base):

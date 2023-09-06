@@ -1,19 +1,18 @@
 from faker import Faker
 import random
-from sqlalchemy.orm import sessionmaker
-from models import Book, Reader, Review, engine, Base
+from models import Book, Reader, Review, engine, Base, session
 
 fake = Faker()
 
 def seed_data():
-    Base.metadata.create_all(engine)
+    print("Clearing DB")
+    session.query(Book).delete()
+    session.query(Reader).delete()
+    session.query(Review).delete()
 
-    Session = sessionmaker(bind=engine)
-    session = Session()
-    
     for _ in range(10): 
         book = Book(
-            name=fake.unique.first_name(),
+            name=fake.unique.name(),
             author=fake.name(),
             genre=fake.word(),
             reader_count=random.randint(1, 100)
@@ -24,7 +23,7 @@ def seed_data():
         reader = Reader(
             first_name=fake.first_name(),
             last_name=fake.last_name(),
-            library_id=fake.unique.random_number()
+            library_id=random.randint(1000, 10000)
         )
         session.add(reader)
    

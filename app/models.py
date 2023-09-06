@@ -28,6 +28,26 @@ class Book(Base):
             + f"Genre: {self.genre}" \
             + f"Readers: {self.reader_count}"
 
+    def book_name(self):
+        return self.name
+    
+    def book_author(self):
+        return self.author
+    
+    def book_genre(self):
+        return self.genre
+    
+    def total_reader_count(self):
+        return self.reader_count
+    
+    def all_reviews(self):
+        return [review.rating for review in self.reviews]
+    
+    def most_popular_book(self):
+        for review in self.reviews:
+            if review.rating == max(review.rating for review in self.reviews):
+                return review.book.name
+    
 
 class Reader(Base):
     __tablename__ = 'readers'

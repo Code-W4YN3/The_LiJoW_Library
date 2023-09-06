@@ -10,16 +10,20 @@ def seed_data():
     session.query(Reader).delete()
     session.query(Review).delete()
 
-    for _ in range(10): 
+
+    print("...")
+    print("Seeding Books, Readers and Reviews...")
+    genres = ["Fiction", "Romance", "Fantasy", "History", "Self-Help", "Humor"]
+    for _ in range(20): 
         book = Book(
             name=fake.unique.name(),
             author=fake.name(),
-            genre=fake.word(),
+            genre=random.choice(genres),
             reader_count=random.randint(1, 100)
         )
         session.add(book)
 
-    for _ in range(20): 
+    for _ in range(15): 
         reader = Reader(
             first_name=fake.first_name(),
             last_name=fake.last_name(),
@@ -33,12 +37,14 @@ def seed_data():
         book = random.choice(books)
         reader = random.choice(readers)
         review = Review(
-            rating=random.randint(1, 5),
+            rating=random.randint(1, 10),
             book=book,
             reader=reader
         )
         session.add(review)
     
+    print("...")
+    print("Seeded data")
     session.commit()
     session.close()
 

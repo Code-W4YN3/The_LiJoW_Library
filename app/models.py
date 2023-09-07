@@ -43,7 +43,7 @@ class Book(Base):
 
     def all_reviews(self):
         return [review.rating for review in self.reviews]
-    
+
     def all_readers(self):
         return [reader.get_full_name() for reader in self.readers]
 
@@ -52,7 +52,7 @@ class Book(Base):
             if review.rating == max(review.rating for review in self.reviews):
                 return review.book.name
 
-    @classmethod        
+    @classmethod
     def all_books(cls):
         books = session.query(Book).all()
         for i in books:
@@ -70,7 +70,7 @@ class Book(Base):
         session.delete(rm_book)
         session.commit()
 
-     
+
 class Reader(Base):
     __tablename__ = 'readers'
 
@@ -105,14 +105,30 @@ class Reader(Base):
         for review in self.reviews:
             if review.rating == max(review.rating for review in self.reviews):
                 return review.book.name
-   
+
     @classmethod
     def all_readers(cls):
        readers = session.query(Reader).all()
        for i in readers:
             print(f"{i.get_full_name()}, id: {i.library_id}")
 
+    @classmethod
+    def validate_reader(cls, library_id, session):
+        reader = session.query(Reader).filter_by(library_id=library_id).first()
+        return reader is not None
 
+    # def reviewed_books(self):
+    #     all_reviews = Review.all()
+    #     for i in all_reviews:
+    #         if i.reader == self:
+    #             reviewed_books.add(i.book)
+    #     return list(reviewed_books)
+
+    @classmethod
+    def add_reader(cls,first_name, last_name, library_id):
+        new_row = Reader(first_name=f"{first_name}", last_name=f"{last_name}", library_id=f"{library_id}")
+        session.add(new_row)
+        session.commit()
 
 class Review(Base):
     __tablename__ = 'reviews'
@@ -130,3 +146,9 @@ class Review(Base):
             f'Reader: {self.reader_id}, ' +\
             f'Rating: {self.rating}, ' + \
             f'Book_id: {self.book_id}'
+
+    @classmethod
+    def add_review(cls,reader_id, rating, book_id):
+        new_row = Review(reader_id=f"{reader_id}", rating=f"{rating}", book_id=f"{book_id}")
+        session.add(new_row)
+        session.commit()

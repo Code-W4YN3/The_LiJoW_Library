@@ -169,7 +169,7 @@ class Review(Base):
 
     @classmethod
     def add_review(cls, rating, book_id, reader_id):
-        new_row = Review(reader_id=f"{reader_id}", rating=f"{rating}", book_id=f"{book_id}")
+        new_row = Review(rating=f"{rating}", book_id=f"{book_id}", reader_id=f"{reader_id}")
         session.add(new_row)
         session.commit()
 

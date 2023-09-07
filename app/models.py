@@ -2,6 +2,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, ForeignKey, Table, create_engine, insert, delete
 from sqlalchemy.orm import relationship, backref, sessionmaker
 from sqlalchemy.ext.associationproxy import association_proxy
+import random
 
 Base = declarative_base()
 engine = create_engine('sqlite:///library.db')
@@ -55,10 +56,20 @@ class Book(Base):
     def all_books(cls):
         books = session.query(Book).all()
         for i in books:
-            print(f"{i.name} by {i.author}, {i.genre}")
+            print(f"{i.id}.{i.name} by {i.author}, {i.genre}")
 
-    def add_book():
-        pass 
+    @classmethod
+    def add_book(cls,name, author, genre):
+        new_row = Book(name=f"{name}", author=f"{author}", genre=f"{genre}", reader_count=random.randint(1, 100))
+        session.add(new_row)
+        session.commit()
+
+    @classmethod
+    def remove_book(cls, bk_id):
+        rm_book = session.query(Book).filter(Book.id == bk_id).first()
+        session.delete(rm_book)
+        session.commit()
+
      
 class Reader(Base):
     __tablename__ = 'readers'

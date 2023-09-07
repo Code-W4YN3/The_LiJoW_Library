@@ -16,9 +16,21 @@ def login():
                         print(Book.all_books())
                         choice = input("Select \n1.Add Book \n2.Remove Book \n3.Back \nInput: ")
                         if choice == "1":
-                            pass
+                            print("Enter: ")
+                            bk_name = input("Book Name: ")
+                            bk_author =input("Author: ")
+                            bk_genre = input("Genre: ")
+                            Book.add_book(bk_name, bk_author, bk_genre)
+                            print(f"Added book {bk_name} by {bk_author} \n ")
+                            admin_choice()
+
                         elif choice == "2":
-                            pass
+                            print("Enter: ")
+                            bk_id = input("Book Id: ")
+                            Book.remove_book(bk_id)
+                            print(f"Removed book by id {bk_id} \n ")
+                            admin_choice()
+
                         elif choice == "3":
                             admin_choice()
                         else:
@@ -40,7 +52,7 @@ def login():
                     elif choice == "3":
                         print("Successfully logged out")
                         login()
-                        
+
                     else:
                         print("Invalid input. Please enter 1 or 2")
                         admin_choice()

@@ -57,6 +57,7 @@ class Book(Base):
         books = session.query(Book).all()
         for i in books:
             print(f"{i.id}.{i.name} by {i.author}, {i.genre}")
+        return " "
 
     @classmethod
     def add_book(cls,name, author, genre):
@@ -108,27 +109,38 @@ class Reader(Base):
 
     @classmethod
     def all_readers(cls):
-       readers = session.query(Reader).all()
-       for i in readers:
-            print(f"{i.get_full_name()}, id: {i.library_id}")
+        readers = session.query(Reader).all()
+        for i in readers:
+            print(f"{i.id}.{i.get_full_name()}, id: {i.library_id}")
+        return " "
 
     @classmethod
     def validate_reader(cls, library_id, session):
         reader = session.query(Reader).filter_by(library_id=library_id).first()
         return reader is not None
 
-    # def reviewed_books(self):
-    #     all_reviews = Review.all()
-    #     for i in all_reviews:
-    #         if i.reader == self:
-    #             reviewed_books.add(i.book)
-    #     return list(reviewed_books)
+    def reviewed_books(self):
+        for review in self.reviews:
+            print(f"Id:{review.id} {review.book.name}")
+        return " "
+    
+    def my_reviews(self):
+        for review in self.reviews:
+            print(f"{review.book.name} : {review.rating}/10")
+        return " "
 
     @classmethod
     def add_reader(cls,first_name, last_name, library_id):
         new_row = Reader(first_name=f"{first_name}", last_name=f"{last_name}", library_id=f"{library_id}")
         session.add(new_row)
         session.commit()
+
+    @classmethod
+    def remove_reader(cls, library_id):
+        rm_reader = session.query(Reader).filter(Reader.library_id == library_id).first()
+        session.delete(rm_reader)
+        session.commit()
+
 
 class Review(Base):
     __tablename__ = 'reviews'
@@ -146,9 +158,24 @@ class Review(Base):
             f'Reader: {self.reader_id}, ' +\
             f'Rating: {self.rating}, ' + \
             f'Book_id: {self.book_id}'
+    
+    def rev_reader(self):
+        query = session.query(Reader).filter_by(id = self.reader_id).first()
+        return f"{query.first_name} {query.last_name}"
+    
+    def rev_book(self):
+        query = session.query(Book).filter_by(id = self.book_id).first()
+        return f"{query.name}"
 
     @classmethod
-    def add_review(cls,reader_id, rating, book_id):
+    def add_review(cls, rating, book_id, reader_id):
         new_row = Review(reader_id=f"{reader_id}", rating=f"{rating}", book_id=f"{book_id}")
         session.add(new_row)
         session.commit()
+
+    @classmethod
+    def all_reviews(cls):
+        reviews = session.query(Review).all()
+        for i in reviews:
+            print(f"Review for {i.rev_book()} by {i.rev_reader()}: {i.rating}/10")
+        return " "

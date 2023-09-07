@@ -22,7 +22,7 @@ As a user i should be able to:
 * View my read books
 * View other reader reviews
 * View my reviews
-*Log out
+* Log out
 
 
 ## Run Locally

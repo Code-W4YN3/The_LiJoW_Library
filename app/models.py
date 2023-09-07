@@ -1,5 +1,5 @@
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, ForeignKey, Table, create_engine
+from sqlalchemy import Column, Integer, String, ForeignKey, Table, create_engine, insert, delete
 from sqlalchemy.orm import relationship, backref, sessionmaker
 from sqlalchemy.ext.associationproxy import association_proxy
 
@@ -18,7 +18,7 @@ class Book(Base):
     reader_count = Column(Integer())
 
     reviews = relationship('Review', back_populates='book')
-    customers = association_proxy('reviews', 'reader',
+    readers = association_proxy('reviews', 'reader',
         creator=lambda rd: Review(reader=rd))
 
     def __repr__(self):
@@ -42,13 +42,24 @@ class Book(Base):
 
     def all_reviews(self):
         return [review.rating for review in self.reviews]
+    
+    def all_readers(self):
+        return [reader.get_full_name() for reader in self.readers]
 
     def most_popular_book(self):
         for review in self.reviews:
             if review.rating == max(review.rating for review in self.reviews):
                 return review.book.name
 
+    @classmethod        
+    def all_books(cls):
+        books = session.query(Book).all()
+        for i in books:
+            print(f"{i.name} by {i.author}, {i.genre}")
 
+    def add_book():
+        pass 
+     
 class Reader(Base):
     __tablename__ = 'readers'
 
@@ -79,11 +90,17 @@ class Reader(Base):
     def get_library_id(self):
         return self.library_id
 
-
     def favorite_book(self):
         for review in self.reviews:
             if review.rating == max(review.rating for review in self.reviews):
                 return review.book.name
+   
+    @classmethod
+    def all_readers(cls):
+       readers = session.query(Reader).all()
+       for i in readers:
+            print(f"{i.get_full_name()}, id: {i.library_id}")
+
 
 
 class Review(Base):

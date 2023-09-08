@@ -34,12 +34,13 @@ To run this app locally, you need a PC with:
 * Access to the internet
 
 ### Installation Process
+In your local terminal:
   1. Clone this repository using
-    ```bash
+    ```
       git clone git@github.com:Code-W4YN3/The_LiJoW_Library.git
     ```
   2. Navigate into the project folder.
-    ```bash
+    ```
       cd The_LiJoW_Library
     ```
   3. Run the following commands in the terminal:

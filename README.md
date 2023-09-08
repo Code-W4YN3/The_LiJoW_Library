@@ -2,6 +2,9 @@
 #### This is a Library Management System created using Python and SQLAlchemy.
 #### By Linet Muthii, Joanne Ndirangu and Wayne Otido
 
+Project presentation slides: 
+https://docs.google.com/presentation/d/e/2PACX-1vSNm3ne5cInyCdGLdlX1ruqN5VOWSI6V7HHwU9A8IlZFAMDeSDse3me0dgX9kJhu-cPpIzSDQHFOtVm/pub?start=true&loop=false&delayms=10000&slide=id.gc6f90357f_0_5
+
 ## Description
 A library project ,using CLI for user input, that manages the library database, book, reader and reader-review tables.
 
